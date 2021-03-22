@@ -1,0 +1,12 @@
+<div class="hero">
+  <div class="hero__content">
+    <div class="hero__content__main">
+      {{macros.chapter(partial.chapter, class='hero__content__main')}}
+    </div>
+    {% if partial.image %}
+      <div class="hero__content__image">
+        {{macros.image(partial.image)}}
+      </div>
+    {% endif %}
+  </div>
+</div>

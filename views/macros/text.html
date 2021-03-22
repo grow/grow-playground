@@ -1,0 +1,3 @@
+{%- macro text(params) -%}
+  {{(params.text if params.text else params)|safe}}
+{%- endmacro -%}

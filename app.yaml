@@ -1,0 +1,41 @@
+api_version: 1
+runtime: python27
+threadsafe: true
+service: starter
+
+handlers:
+- url: /(.*\..*)
+  static_files: build/\1
+  upload: build/(.*\..*)
+  expiration: 1s
+  secure: always
+- url: /(.+)/
+  static_files: build/\1/index.html
+  upload: build/(.+)/index.html
+  expiration: 1s
+  secure: always
+- url: /(.+)
+  static_files: build/\1/index.html
+  upload: build/(.+)/index.html
+  expiration: 1s
+  secure: always
+- url: /
+  static_files: build/index.html
+  upload: build/index.html
+  expiration: 1s
+  secure: always
+
+skip_files:
+- (?!(app|build)).*
+- ^(.*/)?#.*#
+- ^(.*/)?.*/RCS/.*
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?.*\.so$
+- ^(.*/)?.*\_test.(html|js|py)$
+- ^(.*/)?.*~
+- ^(.*/)?\..*
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?run_tests.py

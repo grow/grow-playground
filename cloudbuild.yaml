@@ -1,0 +1,92 @@
+substitutions:
+  _BUDOU_KEY: ''
+  _CACHE_DIRS: extensions node_modules
+  _WEBREVIEW_API_KEY: cae5efdd-f655-4648-bcb1-29c12c8cbe9d
+
+steps:
+
+- name: gcr.io/cloud-builders/gsutil
+  id: download and extract cache
+  entrypoint: 'bash'
+  args:
+  - '-ec'
+  - |
+    gsutil -m cp gs://artifacts.${PROJECT_ID}.appspot.com/grow-cache-${REPO_NAME}-${BRANCH_NAME}/cache.tgz cache.tgz || echo 'No cache to download.'
+    tar -xzf cache.tgz || echo 'No cache to extract.'
+
+- name: circleci/node:lts-browsers
+  id: warm up test
+  entrypoint: 'bash'
+  waitFor: ['-']
+  args: ['-ec', 'echo "done"']
+
+- name: grow/base:py3
+  id: gcloud token
+  waitFor: ['-']
+  entrypoint: 'bash'
+  args:
+  - '-ec'
+  - |
+    [[ -f buildbot-service-account-key.enc ]] \
+        && (make buildbot-decrypt \
+            && gcloud auth activate-service-account --key-file buildbot-service-account.json) \
+        || echo 'No key, skipping gcloud auth.'
+
+- name: grow/base:py3
+  id: grow install
+  waitFor: ['download and extract cache']
+  args: ['grow', 'install']
+
+- name: grow/base:py3
+  id: grow stage
+  waitFor: ['grow install']
+  entrypoint: 'bash'
+  args:
+  - '-ec'
+  - |
+    [[ -f buildbot-service-account-key.enc ]] \
+        && grow --auth-key-file buildbot-service-account.json preprocess -t buildbot \
+        || echo 'No key, skipping preprocess.'
+    # Use the following line instead for projects that deploy to webreview.
+    # SUBDOMAIN=$(echo ${BRANCH_NAME} | sed -e "s/\//-/g" | sed -e "s/^feature-//g") make stage
+    if [ "${BRANCH_NAME}" != "main" ]; then SUBDOMAIN=$(echo ${BRANCH_NAME} | sed -e "s/\//-/g" | sed -e "s/^feature-//g") make stage-gae; fi;
+  env:
+  - 'BRANCH_NAME=${BRANCH_NAME}'
+  - 'BUDOU_KEY=${_BUDOU_KEY}'
+  - 'WEBREVIEW_API_KEY=${_WEBREVIEW_API_KEY}'
+
+- name: grow/base:py3
+  id: test build
+  waitFor: ['grow install']
+  args: ['grow', 'build']
+
+- name: circleci/node:lts-browsers
+  id: test run
+  waitFor: ['test build']
+  entrypoint: 'bash'
+  args:
+  - '-ec'
+  - |
+    sudo chown -R `whoami` /workspace /builder/home
+    sudo chmod -R 777 /workspace /builder/home
+    npm install puppeteer
+    npm run test:ci
+
+- name: grow/base:py3
+  id: deploy if prod
+  waitFor: ['grow install']
+  entrypoint: 'bash'
+  args:
+  - '-ec'
+  - |
+    if [ "${BRANCH_NAME}" == "main" ]; then make deploy; fi;
+
+- name: gcr.io/cloud-builders/gsutil
+  id: compress cache
+  waitFor: ['test run']
+  entrypoint: 'bash'
+  args:
+  - '-ec'
+  - |
+    tar -czf cache.tgz $(ls -d ${_CACHE_DIRS})
+    gsutil cp cache.tgz gs://artifacts.${PROJECT_ID}.appspot.com/grow-cache-${REPO_NAME}-${BRANCH_NAME}/cache.tgz

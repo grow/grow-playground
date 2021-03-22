@@ -1,0 +1,25 @@
+partial: header
+
+logo:
+  link: !g.doc /content/pages/index.yaml
+  title@: 'Starter'
+  image:
+    url: https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg
+    title: Google
+
+nav:
+  - title@: Home
+    doc: !g.doc /content/pages/index.yaml
+  - title@: Styles
+    doc: !g.doc /content/pages/styles.yaml
+
+aside:
+  nav:
+  - title@: Contact Us
+    url: '#TODO'
+  buttons:
+  - title@: 'Secondary'
+    class: button button--medium
+    url: '#TODO'
+  - title@: 'Primary'
+    url: '#TODO'

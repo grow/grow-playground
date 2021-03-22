@@ -1,0 +1,161 @@
+{% import "/views/macros/inspect.html" as inspect with context %}
+
+<!DOCTYPE html>
+<html lang="{{doc.locale.language}}" {% if doc.locale.is_rtl %}dir="rtl"{% endif %}>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if doc.description %}
+      <meta name="description" content="{{_(doc.description)}}">
+    {% endif %}
+    {% if podspec.meta.site_author %}
+      <meta name="author" content="{{podspec.meta.site_author}}">
+    {% endif %}
+
+    <link rel="canonical" href="{{doc.url}}">
+    {% if doc.noindex or doc.collection.noindex %}
+      <meta name="robots" content="noindex">
+    {% endif %}
+    <meta name="referrer" content="no-referrer">
+    <title>{% if doc.title %}{{doc.title}}{% endif %}</title>
+
+    {% for locale in doc.locales %}
+      {% set localized_doc = doc.localize(locale) -%}
+      <link
+        href="{{localized_doc.url|localize}}"
+        hreflang="{{'x-default' if locale == podspec.localization.default_locale
+                                else locale|lower()|replace('_', '-')}}"
+        rel="alternate"
+      >
+    {% endfor %}
+
+    <meta property="og:url" content="{{doc.url}}">
+    <meta property="og:title" content="{{_(doc.title)}}">
+    <meta property="og:description" content="{{_(doc.description)}}">
+    <meta property="og:site_name" content="{{podspec.meta.site_name}}">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="{{doc.locale.language}}">
+    <meta property="og:image:secure_url" content="{{doc.meta_image or podspec.meta.og_image_url}}">
+    <meta property="og:image" content="{{doc.meta_image or podspec.meta.og_image_url}}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="{{_(doc.description)}}">
+    <meta name="twitter:title" content="{{_(doc.title)}}">
+    <meta name="twitter:site" content="{{podspec.meta.twitter_user}}">
+    <meta
+      name="twitter:image"
+      content="{{doc.meta_image or podspec.meta.og_image_url}}"
+    >
+    <meta name="twitter:creator" content="{{podspec.meta.twitter_user}}">
+
+    {% set preconnect = (podspec.meta.preconnect or []) + (doc.preconnect or []) %}
+    {% if preconnect %}
+      {% for url in preconnect %}
+        <link rel="preconnect" href="{{url}}">
+      {% endfor %}
+    {% endif %}
+
+    {% set url = podspec.meta.favicon_url %}
+    {% if podspec.meta.favicon_path %}
+      {% set url = g.static(podspec.meta.favicon_path).url.path %}
+    {% endif %}
+    {% if url %}
+      <link rel="icon" href="{{url}}">
+    {% endif %}
+
+    <script src="{{g.static('/dist/js/main.min.js').url.path}}"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id={{podspec.meta.google_analytics_id}}"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{podspec.meta.google_analytics_id}}', { 'page_referrer' : document.referrer.split('?')[0] });
+    </script>
+
+    {# Stackdriver client-side error reporting. #}
+    {% if env.name not in ['prod']
+        and podspec.meta.stackdriver_api_key
+        and podspec.meta.gcp_project_id %}
+      <script defer src="https://shopping.thinkwithgoogle.com/stackdriver-errors-concat.min.js"></script>
+      <script>
+        window.addEventListener('DOMContentLoaded', function() {
+          var reporter = new StackdriverErrorReporter();
+          reporter.start({
+            key: '{{podspec.meta.stackdriver_api_key}}',
+            projectId: '{{podspec.meta.gcp_project_id}}'
+          });
+        });
+      </script>
+    {% endif %}
+
+    {# Inline CSS for "above the fold" content, while deferring
+    loading the rest of the styles. #}
+    {% set inlined_css = ['header'] %}
+    {% set deferred_css = ['footer'] %}
+    {% for partial in doc.partials %}
+      {% if loop.index0 < 2 or partial.inline_styles %}
+        {% do inlined_css.append(partial.partial) %}
+        {% if partial.subpartials %}
+          {% for subpartial in partial.subpartials %}
+            {% do inlined_css.append(subpartial.partial) %}
+          {% endfor %}
+        {% endif %}
+      {% elif partial.partial not in inlined_css %}
+        {% do deferred_css.append(partial.partial) %}
+      {% endif %}
+    {% endfor %}
+    {% from '/views/macros/load_styles.html'
+       import inline_partial_styles, defer_partial_styles, defer_stylesheet
+       with context %}
+    {% for partial_name in inlined_css|unique %}
+      {{inline_partial_styles(partial_name)}}
+    {% endfor %}
+    {% for partial_name in deferred_css|unique %}
+      {{defer_partial_styles(partial_name)}}
+    {% endfor %}
+
+    {{defer_stylesheet(g.static('/dist/css/main.min.css').url.path)}}
+    {{defer_stylesheet(
+      "//fonts.googleapis.com/icon?family=Material+Icons&display=swap"
+    )}}
+    {{defer_stylesheet(
+      "//fonts.googleapis.com/css?family=Google+Sans:300,400,500,600,700|Roboto:100,300,400,500,700&display=swap"
+    )}}
+  </head>
+
+  <body add-browser-name>
+    <div class="main">
+      {% block header %}
+        {{inspect.render_partial(g.yaml('/content/partials/header.yaml'), class_name='main__module')}}
+      {% endblock %}
+      {% block main %}
+        {% if doc.partials %}
+          {% for partial in doc.partials if partial.partial and partial.enabled is not sameas false %}
+            {{inspect.render_partial(partial, class_name='main__module')}}
+          {% endfor %}
+        {% else %}
+          {{doc.html|safe}}
+        {% endif %}
+      {% endblock %}
+      {% block footer %}
+        {{inspect.render_partial(g.yaml('/content/partials/footer.yaml'), class_name='main__module')}}
+      {% endblock %}
+    </div>
+  </body>
+</html>
+
+{% if env.name not in ['prod'] %}
+  <script>
+    let params = new URLSearchParams(window.location.search);
+    if (params.has('inspect') || params.has('editor')) {
+      document.documentElement.setAttribute('inspect-enabled', '');
+      if (params.has('module')) {
+        document.documentElement.setAttribute('inspect-isolate-module', params.get('module'));
+      }
+    }
+  </script>
+{% endif %}

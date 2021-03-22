@@ -1,0 +1,34 @@
+{% import "/views/macros/image.html" as image with context %}
+
+{% macro button(params) %}
+  {% set url = params.doc.url.path if params.doc else params.url %}
+  {% set url = params.file.url.path if params.file else url %}
+  <a
+      propagate-query-string
+      {% if params.attr %}
+      {{params.attr|safe}}
+      {% endif %}
+      {% if params.ng_click %}
+      ng-click="{{params.ng_click}}"
+      {% endif %}
+      {% if params.target %}
+      target="{{params.target}}"
+      {% endif %}
+      class="button {{params.class}} {{"button--ytmodal" if params.youtube_id}} {{"button--modal" if params.modal_id}}"
+      {% if params.modal_id %}
+      data-modal-open="{{params.modal_id}}"
+      {% endif %}
+      {% if params.youtube_id %}
+      data-youtube-id="{{params.youtube_id}}"
+      {% else %}
+      href="{{url}}"
+      {% endif %}
+      tabindex="0"
+      >
+    {% if params.image %}
+      {{image.image(params.image)}}
+    {% else %}
+      {{params.title}}
+    {% endif %}
+  </a>
+{% endmacro %}

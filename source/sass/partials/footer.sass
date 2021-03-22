@@ -1,0 +1,97 @@
+@import ../utils/breakpoints
+@import ../utils/space
+@import ../utils/type
+
+$footer-font-color: #5f6368
+
+.footer
+  background: #f8f9fa
+  color: $footer-font-color
+
+.footer__frame
+  +space-frame
+
+.footer__nav
+  margin: 0 auto
+  box-sizing: border-box
+  justify-content: space-between
+  padding: 40px 0 20px
+  +lg
+    align-items: flex-start
+    display: flex
+    padding: 20px 0 20px
+
+.footer__nav a
+  color: $footer-font-color
+  display: inline-block
+  font-size: 14px
+  font-weight: 400
+  letter-spacing: .25px
+  line-height: 1.57143
+  text-decoration: none
+  &:visited
+    color: $footer-font-color
+
+.footer__nav__aside
+  align-items: center
+  display: flex
+  justify-content: center
+  +lg-lt
+    justify-content: flex-start
+    margin-top: 10px
+
+.footer__nav__aside a
+  align-items: center
+  display: inline-flex
+  justify-content: center
+
+.footer__nav__aside a i
+  margin-right: 8px
+  line-height: 0
+
+.footer__nav__aside__language select
+  appearance: none
+  background-color: #f8f9fa
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzU0NTQ1NCI+PHBhdGggZD0iTTcgMTBsNSA1IDUtNXoiPjwvcGF0aD48L3N2Zz4=')
+  background-position: right 50%
+  background-repeat: no-repeat
+  border: none
+  border-radius: 0
+  box-sizing: border-box
+  color: #5f6368
+  display: inline-block
+  font-size: 14px
+  font-weight: 400
+  margin: 0 0 0 30px
+  padding: 0 24px 0 2px
+  text-overflow: ellipsis
+  white-space: pre-wrap
+
+.footer__nav__links
+  +lg
+    display: flex
+
+.footer__nav__links__item
+  padding: 0 30px 15px 0
+  +lg-lt
+    display: inline-flex
+  &:first-child
+    margin-right: 55px
+    padding: 0
+    +lg-lt
+      width: 100%
+      margin-right: 0
+      margin-bottom: 40px
+
+.footer__nav__links__item img
+  max-width: 86px
+
+.footer__disclaimer
+  box-sizing: border-box
+  font-size: 14px
+  font-weight: 300
+  line-height: 22px
+  margin: 0 auto
+  padding: 0 0 20px
+  +lg
+    padding: 0 0 20px

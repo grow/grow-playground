@@ -1,0 +1,13 @@
+fields:
+- type: text
+  key: $title@
+  label: Page title
+- type: text
+  key: description@
+  label: Meta description
+- type: google_image
+  key: meta_image
+  label: Social sharing image
+- type: partials
+  key: partials
+  label: Sections

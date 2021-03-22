@@ -1,0 +1,139 @@
+$title@: Starter - description.
+description@: Description.
+partials:
+- partial: spacer
+  class: spacer--lg
+- partial: hero
+  chapter:
+    body:
+      text: Duis occaecat irure aute commodo incididunt ut id dolor ad do commodo. Adipisicing aliqua adipisicing et officia amet minim tempor fugiat ad aute. Nisi culpa incididunt eiusmod amet dolor in eu dolor cupidatat. Laboris cupidatat pariatur nulla id est ut magna velit deserunt nostrud exercitation.
+    buttons:
+    - title: Learn more
+      url: '#TODO'
+    - class: button--medium
+      title: Watch video
+      youtube_id: 5qap5aO4i9A
+    footnote: Download on <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.tachyon&amp;hl=en" target="_blank">Android</a> or <a href="https://itunes.apple.com/app/apple-store/id1096918571?pt=9008&amp;mt=8" target="_blank">iOS</a>
+    icons:
+    - responsive_styles:
+        all: 'max-width: 48px'
+      url: https://lh3.googleusercontent.com/vmhpd9Ueoznnt3rg3srzRXan4cWomk-GG0t2zRNjwOapAXep-b4bAPjTFbrXgk2sS4sASpI3an_U62sDfIxutTBzaY5x6KWeFS5TJKI
+    title:
+      text: Cupidatat veniam fugiat tempor.
+  image:
+    url: https://lh3.googleusercontent.com/a4x29ldDCRaTfBBQlRz-kSl98AJT_MVGVQZ565zGzPrFF32X4yyTeQM0S5BP6J2_pKBCUbf2XRKVqax-KIq7R7t1bWf9fS5gWyKgLg
+- partial: spacer
+  class: spacer--lg
+- partial: grid-1x1
+  sections:
+  - background:
+      images:
+      - url: https://lh3.googleusercontent.com/4LAfSgNY7nCP77B7yDC6c--mYFzlgWbndY375M9HntYKw9hfT90jGz73edqCuVVSeMfcnZXuMpHNbLJ61YfT=rw-w2880
+  - chapter:
+      body: Duis consectetur laboris dolor et est aliqua aliqua ex proident pariatur officia amet nostrud. Velit non mollit pariatur magna voluptate in anim Lorem. Incididunt nisi commodo cupidatat cupidatat veniam dolore laboris. Irure Lorem id cupidatat qui aute culpa laboris. In enim ea pariatur ut.
+      title: Nostrud irure ad veniam cupidatat aute.
+- partial: grid-1x1
+  class: grid-1x1--alternate-mobile
+  sections:
+  - chapter:
+      body: Duis consectetur laboris dolor et est aliqua aliqua ex proident pariatur officia amet nostrud. Velit non mollit pariatur magna voluptate in anim Lorem. Incididunt nisi commodo cupidatat cupidatat veniam dolore laboris. Irure Lorem id cupidatat qui aute culpa laboris. In enim ea pariatur ut.
+      title: Nostrud irure ad veniam cupidatat aute.
+  - background:
+      images:
+      - url: https://lh3.googleusercontent.com/4LAfSgNY7nCP77B7yDC6c--mYFzlgWbndY375M9HntYKw9hfT90jGz73edqCuVVSeMfcnZXuMpHNbLJ61YfT=rw-w2880
+- partial: columns
+  columns:
+  - body: Lorem ipsum
+    title: Lorem ipsum
+  - body: Lorem ipsum
+    title: Lorem ipsum
+  - body: Lorem ipsum
+    title: Lorem ipsum
+  - body: Lorem ipsum
+    title: Lorem ipsum
+  header:
+    title: Lorem ipsum dolor
+- partial: accordion
+  header:
+    buttons:
+    - class: button--link
+      title@: Expand all
+  items:
+  - body: Lorem ipsum dolor sit amet
+    title: Lorem ipsum dolor sit amet
+  - body: Lorem ipsum dolor sit amet
+    title: Lorem ipsum dolor sit amet
+  - body: Lorem ipsum dolor sit amet
+    title: Lorem ipsum dolor sit amet
+- partial: grid-1-background
+  chapter:
+    body: You can try Google Maps Platform at no cost with a $200 monthly credit.<br desktop> Or, you can talk to someone if you have questions. We’re here to help.
+    title: Get started
+  class: grid-1-background--centered
+- partial: primary-cards
+  cards:
+  - background:
+      images:
+      - url: https://lh3.googleusercontent.com/YWvWZ7nAMr75Qw8DM9BlhCz8fS1p-Q8IlyKbeHSS5kYiWnxOCixylss6qXxKrQ54P2jPH25miAzkYeXIupMqhMo=s0
+    chapter:
+      body: Test
+      buttons:
+      - class: button--medium
+        title@: Test
+      eyebrow: Local context
+      title: Easily integrate local information into your maps
+  - background:
+      images:
+      - class: desktop-only
+        url: https://lh3.googleusercontent.com/0lkw17O-YPd1Jou1D5hoYBAd-AfCqFxqHuh9KoZY8Dn7Ay0tG5KSesldJnbftb3QyoJh0ZJ-JH9HYWcc7M3t1w=s0
+      - class: mobile-only
+        url: https://lh3.googleusercontent.com/hBtM-gGQ_QR5MBQj8KOPPnCFtRjmfsJdn4cPkQnvo2i11xBQyDO3z3RahPwfw8bDSuUihDgVNh6WH6Dx-2rI
+    chapter:
+      body: Test
+      buttons:
+      - class: button--medium
+        title@: Test
+      eyebrow: Local context
+      title: Easily integrate local information into your maps
+    class: primary-cards__cards__card--reversed primary-cards__cards__card--layer-mobile
+- partial: grid-1-background
+  background:
+    images:
+    - class: desktop-only
+      url: https://lh3.googleusercontent.com/-VM96IsEgYnk9EF3ZR2Cx6acOQ3Cp1dnBmTf-SQY48GqJxsNgrcf1yKGsUxIP9jNl69YaV8_mjg-vW8__gUgcg
+    - class: mobile-only
+      url: https://lh3.googleusercontent.com/rha6yB-_KbRCS-BotKwcxzHh9HdEOD_kvGAJBn7uE8Id54w8KIdCVGlxOzHlYy_H2YnkTHjW5PuBHjiH3oLPjwE
+  chapter:
+    title: Google Maps Platform releases a<br desktop> new version of its Maps Javascript<br desktop> API every week
+  class: grid-1-background--reversed grid-1-background--alternate-mobile
+- partial: grid-1-background
+  background:
+    images:
+    - class: desktop-only
+      url: https://lh3.googleusercontent.com/KiqFtPCCdy_milQOljKQ3MOlkFQzsjNl8AO4cOp2TPQdDbrTVdCBUY2IIwd3xhDc197wipQsrQ3k7-vIEGxz=s0
+    - class: mobile-only
+      url: https://lh3.googleusercontent.com/42nNJFxVD8ZlmYvkuA4LpHrRr9EkCRt-A8wJIR4UKs4ZxWCvctzHwFh_bm8RM-u_fV8vDdyTRwGIj04lfeJGog
+  chapter:
+    body: In this game, you’ll draw a delivery route, then<br desktop> race against a vehicle powered by Google Cloud<br desktop> AI and Google Maps Platform.
+    buttons:
+    - class: button--link
+      title: Play the game
+    responsive_styles:
+      mobile: 'background: #F6F5F5'
+    title: Race against<br desktop> real-time data
+- partial: grid-1-background
+  background:
+    images:
+    - class: desktop-only
+      url: https://lh3.googleusercontent.com/YF2LzLHLrN9_F2YzrdpJunGUbfZ1Dcy2wofEfmNQ24i30NEnxYhjQq19JHw6kBz4HTwsZtXI8cM-CF_jo0B-yA
+    - class: mobile-only
+      url: https://lh3.googleusercontent.com/DhxTBun54g3xuqIO3fvv8fP2XV8sdWTkqA2cGVypUxG2ygZqCBhPwCTklJXyggU4_3hWKH4FtYtmcHCMsOr8GBU
+  chapter:
+    body: You can try Google Maps Platform at no cost with a $200 monthly credit.<br desktop> Or, you can talk to someone if you have questions. We’re here to help.
+    buttons:
+    - class: button button--medium
+      title: Contact sales
+    - class: button
+      title: Try for free
+    title: Get started
+  class: grid-1-background--centered grid-1-background--alternate-mobile

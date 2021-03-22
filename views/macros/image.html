@@ -1,0 +1,42 @@
+{% import "/extensions/responsive_styles/responsive_styles.html" as responsive_styles with context %}
+
+{% set breakpoints = [
+  460,
+  768,
+  1024,
+  1440,
+  2880,
+] %}
+
+{% macro render_image(url, params) %}
+  <img
+      {{responsive_style_id(params.responsive_styles)}}
+      {% if params.lazy is not sameas false %}
+      loading="lazy"
+      {% endif %}
+      src="{{url}}"
+      {% if params.style %}style="{{params.style}}"{% endif %}
+      {% if params.class %}class="{{params.class}}"{% endif %}
+      {% if params.title %}title="{{params.title}}" alt="{{params.title}}"{% endif %}
+  >
+{% endmacro %}
+
+{% macro image(params) %}
+  {{responsive_styles.responsive_style(params.responsive_styles)}}
+  {% set url = params.file.url.path if params.file else params.url %}
+  {% set is_dynamic = url.startswith('https://lh3.googleusercontent.com') and "=" not in url %}
+  {% if is_dynamic %}
+    <picture>
+      {% for size in breakpoints[0:1]|reverse %}
+      {# TODO: srcset values are a replacement for autowidth. media values are
+      a replacement for breakpoint style. Make sure the API for the user to
+      specify what they want reflects this properly, remove the [0:1] slice above. #}
+      <source type="image/webp" srcset="{% for item in breakpoints %}{{url}}=rw-w{{item}} {{item}}w{{"," if not loop.last}}{% endfor %}" media="(min-width: {{size}}px)">
+      <source srcset="{{url}}=w{{size}}" media="(min-width: {{size}}px)">
+      {% endfor %}
+      {{render_image(url, params)}}
+    </picture>
+  {% else %}
+    {{render_image(url, params)}}
+  {% endif %}
+{% endmacro %}

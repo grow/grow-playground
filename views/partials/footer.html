@@ -1,0 +1,48 @@
+<div class="footer">
+  <div class="footer__frame">
+    <div class="footer__nav">
+      <div class="footer__nav__links">
+        <div class="footer__nav__links__item">
+          {{macros.image(partial.image)}}
+        </div>
+        {% for item in partial.nav %}
+        <div class="footer__nav__links__item">
+          <a href="{{item.url}}">{{_(item.title)}}</a>
+        </div>
+        {% endfor %}
+      </div>
+      {% if partial.aside %}
+      <div class="footer__nav__aside">
+        <a href="{{partial.aside.link.url}}" target="_blank">
+          <i class="material-icons">help</i>
+          {{_(partial.aside.link.title)}}
+        </a>
+        {% if doc.locales and doc.locales|length > 1 %}
+          <div class="footer__nav__aside__language">
+            <select onchange="window.location.href = this.value">
+              {% for locale in doc.locales %}
+                {% set localized_doc = doc.localize(locale=locale) %}
+                {% if locale == 'zh_Hant_HK' %}
+                  {% set name = '中文 (繁體，香港)' %}
+                {% else %}
+                  {% set name = locale.get_display_name(locale) %}
+                {% endif %}
+                {% set name = name[0]|upper ~ name[1:] %}
+                <option value="{{localized_doc.url|localize}}"
+                  {% if doc.locale == locale %} selected{% endif %}>
+                  {{_(name)}}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+    {% if partial.disclaimer %}
+      <div class="footer__disclaimer">
+        {{_(partial.disclaimer)}}
+      </div>
+    {% endif %}
+  </div>
+</div>

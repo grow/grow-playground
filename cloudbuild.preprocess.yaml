@@ -1,0 +1,21 @@
+steps:
+- name: gcr.io/cloud-builders/gsutil
+  id: download and extract cache
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    gsutil -m cp gs://artifacts.${PROJECT_ID}.appspot.com/grow-cache-${REPO_NAME}/cache.tgz cache.tgz || echo 'No cache to download.'
+    tar -xzf cache.tgz || echo 'No cache to extract.'
+- name: grow/base
+  id: preprocess
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    make buildbot-decrypt
+    gcloud auth activate-service-account --key-file buildbot-service-account.json
+    grow install
+    make buildbot-commit-artifacts
+  env:
+  - 'BRANCH_NAME=${BRANCH_NAME}'

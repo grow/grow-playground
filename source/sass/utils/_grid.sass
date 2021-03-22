@@ -1,0 +1,9 @@
+@import space
+
+$max-content-width: 1440px
+
+=grid-container
+  width: calc(100% - $space-md)
+  +lg
+    width: calc(100% - $space-lg)
+    max-width: $max-content-width - $space-lg

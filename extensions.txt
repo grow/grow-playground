@@ -1,0 +1,4 @@
+git+git://github.com/grow/grow-ext-editor@376d0f18531c03ad1ec9de9871e4c52220313c1f
+git+git://github.com/grow/grow-ext-google-cloud-images
+git+git://github.com/grow/grow-ext-responsive-styles
+git+git://github.com/grow/grow-ext-html-min@31c010acdea9e2965afc75ff905207b71167456d

@@ -1,0 +1,211 @@
+# Runs all buildbot setup commands.
+buildbot-setup:
+	$(MAKE) buildbot-setup-service-account-key
+	$(MAKE) buildbot-setup-services
+	$(MAKE) buildbot-setup-trigger
+
+buildbot-setup-dashboard:
+	gcloud projects add-iam-policy-binding \
+	  $(project) \
+	  --member serviceAccount:$(dashboard_service_account) \
+	  --role roles/viewer ; \
+	gcloud alpha projects update --update-labels=buildbot= $(project)
+
+# Activates GCP services needed for buildbot.
+buildbot-setup-services:
+	for role in storage.objectAdmin appengine.appAdmin appengine.deployer cloudkms.cryptoKeyDecrypter cloudkms.cryptoKeyVersions.useToDecrypt cloudbuild.builds.builder cloudscheduler.serviceAgent ; do \
+	  gcloud projects add-iam-policy-binding \
+	    $(project) \
+	    --member serviceAccount:`gcloud projects describe $(project) | sed -n "s/projectNumber: '\([0-9]*\)'/\1/p"`@cloudbuild.gserviceaccount.com \
+	    --role roles/$$role ; \
+	done
+	for role in storage.objectAdmin appengine.appAdmin appengine.deployer cloudkms.cryptoKeyDecrypter cloudbuild.builds.editor cloudbuild.builds.builder cloudscheduler.serviceAgent ; do \
+	  gcloud projects add-iam-policy-binding \
+	    $(project) \
+	    --member serviceAccount:buildbot@$(project).iam.gserviceaccount.com \
+	    --role roles/$$role ; \
+	done
+	gcloud projects add-iam-policy-binding \
+	  $(project) \
+	  --member serviceAccount:service-`gcloud projects describe $(project) | sed -n "s/projectNumber: '\([0-9]*\)'/\1/p"`@gcp-sa-cloudscheduler.iam.gserviceaccount.com \
+	  --role roles/cloudscheduler.serviceAgent
+	echo "Share resources (Docs, CMS, Drive, etc.) with buildbot@$(project).iam.gserviceaccount.com"
+
+# Creates a trigger on Google Cloud Build.
+buildbot-setup-trigger:
+	gcloud alpha builds triggers create \
+	  cloud-source-repositories \
+	  --project=$(project) \
+	  --repo=$(repo) \
+	  --branch-pattern=".*" \
+	  --build-config=cloudbuild.yaml
+	echo "Visit https://console.cloud.google.com/cloud-build/triggers/connect?project=$(project) and connect the repository. Choose 'see more options' and use GitHub (mirrored)."
+
+# Creates a service account keyfile for a service account for accessing
+# resources needed during builds. Examples of resources include Google Docs,
+# Sheets, or CMS like Kintaro.
+buildbot-setup-service-account-key:
+	gcloud --project=$(project) services enable \
+	  appengine.googleapis.com \
+	  cloudbuild.googleapis.com \
+	  clouderrorreporting.googleapis.com \
+	  cloudfunctions.googleapis.com \
+	  cloudresourcemanager.googleapis.com \
+	  cloudscheduler.googleapis.com \
+	  cloudkms.googleapis.com \
+	  drive.googleapis.com \
+	  sheets.googleapis.com \
+	  storage-api.googleapis.com
+	gcloud beta iam service-accounts create \
+	  buildbot \
+	  --project=$(project) \
+	  --display-name "buildbot" \
+	  || echo "buildbot service account already exists."
+	[[ -f buildbot-service-account.json ]] \
+	  && echo "buildbot-service-account.json already exists." \
+	  || gcloud beta iam service-accounts keys create \
+	  buildbot-service-account.json \
+	  --key-file-type json \
+	  --iam-account buildbot@$(project).iam.gserviceaccount.com
+	gcloud --project=$(project) kms keyrings create \
+	  buildbot \
+	  --location=global || echo "buildbot keyring already exists."
+	gcloud --project=$(project) kms keys create \
+	  buildbot-service-account-key \
+	  --location=global \
+	  --keyring=buildbot \
+	  --purpose=encryption \
+	  || echo "buildbot-service-account-key already exists."
+	gcloud --project=$(project) kms encrypt \
+	  --plaintext-file=buildbot-service-account.json \
+	  --ciphertext-file=buildbot-service-account-key.enc \
+	  --key=buildbot-service-account-key \
+	  --location=global \
+	  --keyring=buildbot
+	echo "Commit buildbot-service-account-key.enc to git."
+	grep -qxF 'buildbot-service-account.json' .gitignore || echo 'buildbot-service-account.json' >> .gitignore
+
+# Decrypts secret into `buildbot-service-account-key.json` which can be used
+# with Grow's `--auth-key-file` flag.
+buildbot-decrypt:
+	gcloud kms decrypt \
+	  --ciphertext-file=buildbot-service-account-key.enc \
+	  --plaintext-file=buildbot-service-account.json \
+	  --location=global \
+	  --keyring=buildbot \
+	  --key=buildbot-service-account-key
+
+buildbot-setup-git:
+	mkdir -p `git rev-parse --git-dir`/hooks/
+	curl -Lo `git rev-parse --git-dir`/hooks/commit-msg https://gerrit-review.googlesource.com/tools/hooks/commit-msg
+	chmod +x `git rev-parse --git-dir`/hooks/commit-msg
+	curl -L https://github.com/github/hub/releases/download/v2.12.2/hub-linux-amd64-2.12.2.tgz > hub.tgz
+	tar -xzf hub.tgz hub-linux-amd64-2.12.2/bin/hub
+	git config --global user.name buildbot
+	git config --global user.email buildbot@$(project).iam.gserviceaccount.com
+
+buildbot-setup-deploy-cron:
+	gcloud scheduler jobs create http \
+		deploy \
+		--project=$(project) \
+		--schedule="every 30 mins" \
+		--time-zone="America/Los_Angeles" \
+		--uri=https://cloudbuild.googleapis.com/v1/projects/$(project)/triggers/deploy:run \
+		--message-body="{\"branchName\":\"main\"}" \
+		--oauth-service-account-email=buildbot@$(project).iam.gserviceaccount.com \
+		--oauth-token-scope=https://www.googleapis.com/auth/cloud-platform
+	echo "View scheduler: https://console.cloud.google.com/cloudscheduler?project=$(project)"
+
+buildbot-setup-preprocess-cron:
+	gcloud scheduler jobs create http \
+		deploy \
+		--project=$(project) \
+		--schedule="every 30 mins" \
+		--time-zone="America/Los_Angeles" \
+		--uri=https://cloudbuild.googleapis.com/v1/projects/$(project)/triggers/preprocess:run \
+		--message-body="{\"branchName\":\"main\"}" \
+		--oauth-service-account-email=buildbot@$(project).iam.gserviceaccount.com \
+		--oauth-token-scope=https://www.googleapis.com/auth/cloud-platform
+	echo "View scheduler: https://console.cloud.google.com/cloudscheduler?project=$(project)"
+
+buildbot-setup-github-token:
+	echo 'View github tokens: https://github.com/settings/tokens/new'
+	echo 'Use "echo -n <GITHUB_TOKEN> > github-token.txt" to generate github-token.txt'
+	grep -qxF 'github-token.txt' .gitignore || echo 'github-token.txt' >> .gitignore
+	gcloud --project=$(project) kms keys create \
+	  github-token \
+	  --location=global \
+	  --keyring=buildbot \
+	  --purpose=encryption \
+	  || echo "key github-token already exists."
+	gcloud kms encrypt \
+	  --project=$(project) \
+	  --plaintext-file=github-token.txt \
+	  --ciphertext-file=github-token.enc \
+	  --location=global \
+	  --keyring=buildbot \
+	  --key=github-token | base64
+
+buildbot-create-ssh-key:
+	gcloud --project=$(project) kms keyrings create \
+	  buildbot \
+	  --location=global || echo "buildbot keyring already exists."
+	gcloud --project=$(project) kms keys create \
+	  buildbot-ssh-key \
+	  --location=global \
+	  --keyring=buildbot \
+	  --purpose=encryption \
+	  || echo "buildbot-ssh-key already exists."
+	mkdir $(HOME)/.ssh/buildbot-$(project) || echo ".ssh subdirectory already exists."
+	ssh-keygen -t rsa -b 4096 -N "" -C "$(BUILDBOT_GIT_EMAIL)" -f $(HOME)/.ssh/buildbot-$(project)/id_rsa
+	gcloud --project=$(project) kms encrypt \
+	  --plaintext-file=$(HOME)/.ssh/buildbot-$(project)/id_rsa \
+	  --ciphertext-file=buildbot-ssh-key.enc \
+	  --key=buildbot-ssh-key \
+	  --location=global \
+	  --keyring=buildbot
+	echo "Commit buildbot-ssh-key.enc to git."
+	echo "Add deploy key to the GitHub repo (if applicable): cat $(HOME)/.ssh/buildbot-$(project)/id_rsa.pub | pbcopy"
+
+buildbot-decrypt-ssh-key:
+	mkdir -p /root/.ssh
+	gcloud kms decrypt \
+	    --ciphertext-file=buildbot-ssh-key.enc \
+	    --plaintext-file=/root/.ssh/id_rsa \
+	    --location=global \
+	    --keyring=buildbot \
+	    --key=buildbot-ssh-key
+	chmod 600 /root/.ssh/id_rsa
+	echo 'Hostname github.com\nIdentityFile /root/.ssh/id_rsa\n' >> /root/.ssh/id_rsa
+	ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts
+
+buildbot-commit-artifacts:
+	$(MAKE) buildbot-decrypt-ssh-key
+	git remote add source $(repo_url)
+	git config --global user.name buildbot
+	git config --global user.email buildbot@$(project).iam.gserviceaccount.com
+	git pull source ${BRANCH_NAME} || (echo "Local change observed since commit process started. Aborting." && exit 0)
+	git checkout ${BRANCH_NAME} || (echo "Remote change observed since commit process started. Aborting." && exit 0)
+	grow --auth-key-file buildbot-service-account.json preprocess -t buildbot
+	git add content
+	git commit -m "[buildbot] Update files automatically" || (echo "No changes after processing. Aborting." && exit 0)
+	git checkout -b buildbot/auto
+	git push -f source || (echo "Remote change observed at final step since commit process started. Aborting." && exit 0)
+	$(MAKE) buildbot-create-pull-request
+
+# NOTE: This requires an extra level of authentication, so we don't trigger it now.
+buildbot-create-pull-request:
+	gcloud kms decrypt \
+	    --ciphertext-file=github-token.enc \
+	    --plaintext-file=/root/.github-token \
+	    --location=global \
+	    --keyring=buildbot \
+	    --key=github-token
+	curl -L https://github.com/github/hub/releases/download/v2.12.2/hub-linux-amd64-2.12.2.tgz > hub.tgz
+	tar -xzf hub.tgz hub-linux-amd64-2.12.2/bin/hub
+	export GITHUB_TOKEN=`cat /root/.github-token` ;\
+	  ./hub-linux-amd64-2.12.2/bin/hub pull-request \
+	  -b ${BRANCH_NAME} \
+	  -f \
+	  -m "[buildbot] Update files automatically [skip ci]" \
+	  || echo "Skipped pull request."

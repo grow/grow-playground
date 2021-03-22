@@ -1,0 +1,7 @@
+{% macro inspect(partial) %}
+  {% if env.name not in ['prod'] %}
+    <div class="inspect" aria-hidden="true">
+      <div class="inspect__name">{{partial.partial}}</div>
+    </div>
+  {% endif %}
+{% endmacro %}

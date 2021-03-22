@@ -1,0 +1,59 @@
+{% import "/extensions/responsive_styles/responsive_styles.html" as responsive_styles with context %}
+{% import "/views/macros/button.html" as button with context %}
+{% import "/views/macros/image.html" as image with context %}
+{% import "/views/macros/text.html" as text %}
+
+{% macro chapter(params, class='chapter') %}
+  {% if params.icons %}
+    <div class="{{class}}__icons">
+      {% for i in params.icons %}
+      <div class="{{class}}__icons__icon">
+        {{image.image(i)}}
+      </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if params.eyebrow %}
+    {{responsive_styles.responsive_style(params.eyebrow.responsive_styles)}}
+    <div class="{{class}}__eyebrow" {{responsive_style_id(params.eyebrow.responsive_styles)}}>
+      {{text.text(params.eyebrow)}}
+    </div>
+  {% endif %}
+  {% if params.title %}
+    {{responsive_styles.responsive_style(params.title.responsive_styles)}}
+    <div class="{{class}}__title" {{responsive_style_id(params.title.responsive_styles)}}>
+      {{text.text(params.title)}}
+    </div>
+  {% endif %}
+  {% if params.subtitle %}
+    {{responsive_styles.responsive_style(params.subtitle.responsive_styles)}}
+    <div class="{{class}}__subtitle" {{responsive_style_id(params.subtitle.responsive_styles)}}>
+      {{text.text(params.subtitle)}}
+    </div>
+  {% endif %}
+  {% if params.body %}
+    {{responsive_styles.responsive_style(params.body.responsive_styles)}}
+    <div class="{{class}}__body" {{responsive_style_id(params.body.responsive_styles)}}>
+      {{text.text(params.body)}}
+    </div>
+  {% endif %}
+  {% if params.images %}
+    <div class="{{class}}__images">
+      {% for i in params.images %}
+      <div class="{{class}}__images__image">
+        {{image.image(i)}}
+      </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if params.buttons %}
+    <div class="{{class}}__buttons">
+      {% for b in params.buttons %}
+      <div class="{{class}}__buttons__button">
+        {{button.button(b)}}
+      </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if params.footnote %}<div class="{{class}}__footnote">{{params.footnote|safe}}</div>{% endif %}
+{% endmacro %}

@@ -1,0 +1,20 @@
+partial: footer
+image:
+  url: https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_dark54_clr_84x28px.svg
+  title: Google
+nav:
+- title: Privacy
+  url: https://www.google.com/policies/
+- title@: Terms
+  url: https://www.google.com/policies/terms/
+- title@: About Google
+  url: https://about.google/
+- title@: Google Products
+  url: https://about.google/products/
+- title@: Join User Studies
+  url: https://userresearch.google.com/?reserved=0&pType=0&productTag=0&campaignType=ghc&campaignDate=42812&labelTag=0&referral_code=Ay485396
+aside:
+  link:
+    title@: Help
+    url: https://support.google.com/duo/#topic=6376099
+disclaimer: Occaecat in sint exercitation ex cupidatat.

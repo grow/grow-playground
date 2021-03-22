@@ -1,0 +1,91 @@
+@import breakpoints
+@import inspect
+
+=type-font-family-primary
+  font-family: 'Google Sans', arial, sans-serif
+
+=type-font-family-secondary
+  font-family: 'Roboto', Arial, Helvetica, sans-serif
+
+=type-h1
+  +inspect-label('type-h1')
+  font-size: 60px
+  line-height: 72px
+
+=type-h2
+  +inspect-label('type-h2')
+  font-size: 48px
+  line-height: 56px
+
+=type-h3
+  +inspect-label('type-h3')
+  font-size: 36px
+  line-height: 44px
+
+=type-h4
+  +inspect-label('type-h4')
+  font-size: 28px
+  line-height: 36px
+
+=type-h5
+  font-size: 20px
+  line-height: 28px
+
+=type-body-large
+  +inspect-label('type-body-large')
+  font-family: Roboto, sans-serif
+  font-size: 18px
+  line-height: 28px
+
+=type-body
+  +inspect-label('type-body')
+  font-family: Roboto, sans-serif
+  font-size: 16px
+  line-height: 24px
+
+=type-small
+  +inspect-label('type-small')
+  font-family: Roboto, sans-serif
+  font-size: 12px
+  line-height: 24px
+
+=type-eyebrow
+  +inspect-label('type-eyebrow')
+  text-transform: uppercase
+  letter-spacing: 0.5px
+  font-size: 14px
+  line-height: 20px
+
+=type-label
+  font-family: Roboto, sans-serif
+  font-size: 11px
+  letter-spacing: 0.5px
+  line-height: 16px
+
+=type-button
+  font-size: 16px
+  line-height: 24px
+  font-weight: 500
+  letter-spacing: .5px
+
+=type-caption
+  font-size: 14px
+  line-height: 24px
+  font-family: Roboto, sans-serif
+
+=type-nav-item
+  +type-font-family-primary
+  font-size: 18px
+  line-height: 1.22
+  letter-spacing: 1.17px
+  font-weight: 500
+  +md
+    font-size: 15px
+    line-height: 24px
+    letter-spacing: initial
+
+=type-footnote
+  line-height: 1.5
+  font-size: 12px
+  font-weight: 300
+  letter-spacing: .35px

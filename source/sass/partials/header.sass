@@ -1,0 +1,268 @@
+@import ../utils/breakpoints
+@import ../utils/color
+@import ../utils/space
+@import ../utils/type
+
+$header-transition-easing: cubic-bezier(0.24, 1, 0.32, 1)
+
+.header
+  background: #fff
+  box-shadow: 0 2px 6px 0 rgba(0,0,0,.12), inset 0 -1px 0 0 #dadce0
+  display: flex
+  justify-content: space-between
+  position: sticky
+  top: 0
+  z-index: 999
+
+.header__frame
+  +space-frame
+  align-items: center
+  padding-top: $space-sm
+  padding-bottom: $space-sm
+  display: flex
+  justify-content: space-between
+  +lg-lt
+    padding-bottom: $space-sm
+    padding-top: $space-sm
+
+.header__logo
+  border-radius: 4px
+  display: flex
+  height: 100%
+  line-height: 0
+  margin: 0 -$space-md
+  a
+    display: inline-flex
+
+.header__logo img
+  width: 80px
+  margin-bottom: -3px  // Offset the bottom of the "g".
+
+.header__aside__nav,
+.header__nav
+  display: flex
+  flex-direction: row
+  height: 100%
+  position: relative
+  +lg
+    flex: 1
+    margin-left: $space-lg
+
+    a + a
+      margin-left: $space-sm
+
+.header__logo,
+.header__nav a,
+.header__aside a:not(.button)
+  +type-button
+  align-items: center
+  color: $color-text-menu
+  display: inline-flex
+  font-weight: normal
+  text-decoration: none
+  +lg
+    border-radius: 4px
+    padding: 0 $space-md
+
+  &:focus
+    box-shadow: 0 0 0 2px $color-primary
+    outline: none
+
+  &:visited
+    color: $color-text-menu
+
+  &:hover
+    background-color: $color-grey-bg
+    color: $color-text
+    &:visited
+      color: $color-text
+
+.header__aside
+  align-items: center
+  display: flex
+  flex: none
+  height: 100%
+  justify-content: center
+
+.header__aside__nav
+  margin-right: $space-md
+
+.header__aside__buttons
+  display: flex
+
+.header__nav__item--active,
+.header__aside__nav__item--active
+  position: relative
+  +lg
+    &:after
+      background-color: $color-primary
+      bottom: -$space-sm
+      content: ''
+      display: block
+      height: 2px
+      left: 0
+      position: absolute
+      right: 0
+      width: 100%
+
+// Mobile version. Define separately for maintainability.
+=header-menu-mobile
+  .header--primary
+    height: 100vh
+    position: fixed
+    width: 320px
+    z-index: 999
+
+  .header__frame
+    align-items: flex-start
+    flex-direction: column
+    height: 100%
+    padding: 0
+
+  .header__nav,
+  .header__aside
+    align-items: flex-start
+    flex-direction: column
+    height: initial
+    width: 100%
+
+  .header__aside
+    box-sizing: border-box
+    padding: $space-lg
+
+  .header__aside__nav
+    margin: $space-md 0
+
+  .header__aside__nav a
+    padding: 0
+
+  .header__logo
+    height: initial
+    margin: $space-md $space-md * 1.5
+    padding: $space-sm
+
+  .header__nav
+    flex: 1
+    border-top: 1px solid $color-hr
+    margin: 0
+    margin-top: -1px
+    padding-top: $space-md
+    padding-bottom: $space-md
+
+  .header__nav a
+    box-sizing: border-box
+    border-radius: 0
+    display: block
+    margin: 0
+    padding: $space-md $space-lg
+    width: 100%
+
+    &:focus
+      box-shadow: inset 0 0 0 2px #1a73e8
+
+    &:hover
+      background-color: transparent
+
+  .header__aside__nav__item
+    &:hover
+      background-color: transparent
+
+  .header__nav__item--active,
+  a.header__nav__item--active
+    background-color: $color-grey-bg
+    color: $color-text
+    &:visited
+      color: $color-text
+    &:after
+      display: none
+    &:hover
+      background-color: $color-grey-bg
+
+  .header__hamburger
+    border-radius: 100%
+    box-sizing: border-box
+    display: flex
+    height: 34px
+    justify-content: center
+    margin-right: 0
+    width: 34px
+
+    svg
+      height: 18px
+      width: 18px
+
+    &:active
+      box-shadow: 0 0 0 2px #aecbfa
+    &:focus
+      box-shadow: 0 0 0 2px #aecbfa
+
+  .header__aside
+    border-top: 1px solid $color-hr
+    padding-top: $space-sm
+
+  .header__aside__nav
+    margin-top: $space-sm
+
+  .header__aside__buttons
+    flex-direction: column
+    width: 100%
+
+    .button + .button
+      margin-left: 0
+      margin-top: $space-sm
+
+  .header-overlay,
+  & + .header-overlay
+    background: rgba(0, 0, 0, .5)
+    bottom: 0
+    cursor: default
+    display: block
+    left: 0
+    position: fixed
+    right: 0
+    top: 0
+    z-index: 998
+
+// Apply mobile styles to menu.
++lg-lt
+  +header-menu-mobile
+  .header--primary
+    opacity: 0
+    pointer-events: none
+    transform: translateX(-100%)
+    transition: transform 350ms $header-transition-easing, opacity 350ms $header-transition-easing, visibility 350ms $header-transition-easing
+    visibility: hidden
+
+// Open the menu when targeted.
+.header:target
+  +header-menu-mobile
+  display: block
+  height: 100vh
+  opacity: 1
+  pointer-events: all
+  position: fixed
+  transform: translateX(0)
+  visibility: visible
+  width: 320px
+
+// Mobile background overlay - appears when menu is expanded.
+.header-overlay
+  display: none
+
+// Mobile fixed header.
+.header--mobile
+  z-index: 997
+
+  .header__frame
+    align-items: center
+    flex-direction: row
+    justify-content: flex-start
+
+  .header__logo
+    margin: $space-md $space-sm $space-md $space-md
+
+  .header__logo + .header__logo
+    margin-left: 0
+
+  +lg
+    display: none

@@ -1,0 +1,34 @@
+substitutions:
+  _CACHE_DIRS: dist extensions
+  _SITE: starter
+
+steps:
+
+- name: gcr.io/cloud-builders/gsutil
+  id: download_cache
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    gsutil -m cp gs://${PROJECT_ID}_cloudbuild/grow-liveworker-dev-${_SITE}-${BRANCH_NAME}/cache.tgz cache.tgz || echo 'No cache to download.'
+    tar -xzf cache.tgz || echo 'No cache to extract.'
+    rm .nvmrc || echo 'No .nvmrc to remove.'
+
+- name: grow/base:py3
+  id: grow_install
+  args: ['grow', 'install']
+
+- name: grow/base:py3
+  id: grow_preprocess
+  args: ['grow', 'preprocess']
+
+- name: gcr.io/cloud-builders/gsutil
+  id: compress_cache
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    tar -czf cache.tgz $(ls -d ${_CACHE_DIRS})
+    sha1sum cache.tgz > cache.tgz.sha1
+    gsutil cp cache.tgz gs://${PROJECT_ID}_cloudbuild/grow-liveworker-dev-${_SITE}-${BRANCH_NAME}/cache.tgz
+    gsutil cp cache.tgz.sha1 gs://${PROJECT_ID}_cloudbuild/grow-liveworker-dev-${_SITE}-${BRANCH_NAME}/cache.tgz.sha1

@@ -1,0 +1,74 @@
+@import utils/type
+
+body
+  +type-font-family-primary
+  background-color: #fff
+  color: $color-text
+  font-size: 16px
+  line-height: 1.5
+  margin: 0
+  padding: 0
+
+h1,
+h2,
+h3,
+h4
+  +type-font-family-primary
+  font-weight: 400
+  margin: 0
+
+h1
+  +type-h1
+
+h2
+  +type-h2
+
+h3
+  +type-h3
+
+h4
+  font-size: 22px
+  line-height: 1.14
+
+img
+  max-width: 100%
+
+a
+  color: $color-blue
+
+  &:visited
+    color: $color-blue
+
+  &:hover
+    color: $color-blue-focus
+
+.main
+  background-color: $color-white
+  margin: 0 auto
+  position: relative
+
+.desktop-only
+  +md-lt
+    display: none !important
+
+.mobile-only
+  +md
+    display: none !important
+
+.ios-only
+  display: none !important
+  @at-root .--isIOS &
+    display: initial !important
+
+.android-only
+  display: none !important
+  @at-root .--isAndroid &
+    display: initial !important
+
+br[desktop]
+  +md-lt
+    display: none
+
+br[mobile]
+  +md
+    display: none

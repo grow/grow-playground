@@ -1,0 +1,20 @@
+{% import "/views/macros/image.html" as image with context %}
+{% import "/extensions/responsive_styles/responsive_styles.html" as responsive_styles with context %}
+
+<div class="grid-1-background {{partial.class}} {{"grid-1-background--has-background" if partial.background}}">
+  {% if partial.background %}
+    <div class="grid-1-background__media">
+      {% for item in partial.background.images %}
+        <div class="grid-1-background__media__image">
+          {{image.image(item)}}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <div class="grid-1-background__frame">
+    {{responsive_styles.responsive_style(partial.chapter.responsive_styles)}}
+    <div class="grid-1-background__frame__content" {{responsive_style_id(partial.chapter.responsive_styles)}}>
+      {{macros.chapter(partial.chapter, class='grid-1-background__frame__content')}}
+    </div>
+  </div>
+</div>

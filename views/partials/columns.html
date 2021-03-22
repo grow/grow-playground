@@ -1,0 +1,12 @@
+<div class="columns {{partial.class}}">
+  <div class="columns__header">
+    {{macros.chapter(partial.header, class='columns__header')}}
+  </div>
+  <div class="columns__columns">
+    {% for column in partial.columns %}
+      <div class="columns__columns__column">
+        {{macros.chapter(column, class='columns__columns__column')}}
+      </div>
+    {% endfor %}
+  </div>
+</div>

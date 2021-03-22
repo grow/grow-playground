@@ -1,0 +1,49 @@
+<div class="header header--primary" id="menu">
+  <div class="header__frame">
+    <a class="header__logo" href="{{partial.logo.link.url.path}}" title="{{partial.logo.title}}">
+      {% set image = partial.logo.image.copy() %}
+      {% do image.update({'lazy': false}) %}
+      {{macros.image(image)}}
+    </a>
+    <div class="header__nav">
+      {% for item in partial.nav %}
+        {% set url = item.doc.url.path if item.doc else item.url %}
+        <a href="{{url}}" class="header__nav__item {{"header__nav__item--active" if url == doc.url.path}}">{{item.title}}</a>
+      {% endfor %}
+    </div>
+    {% if partial.aside %}
+      <div class="header__aside">
+        {% if partial.aside.nav %}
+        <div class="header__aside__nav">
+          {% for item in partial.aside.nav %}
+            {% set url = item.doc.url.path if item.doc else item.url %}
+            <a href="{{url}}" class="header__aside__nav__item {{"header__aside__nav__item--active" if url == doc.url.path}}">{{item.title}}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% if partial.aside.buttons %}
+          <div class="header__aside__buttons">
+            {% for button in partial.aside.buttons %}
+              {{macros.button(button)}}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+  {% endif %}
+  </div>
+</div>
+<a href="#" class="header-overlay"></a>
+<div class="header header--mobile">
+  <div class="header__frame">
+    <a class="header__logo header__hamburger" href="#menu" aria-label="Open the menu">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect y="6" width="36" height="4" fill="#606368"/>
+        <rect y="16" width="36" height="4" fill="#606368"/>
+        <rect y="26" width="36" height="4" fill="#606368"/>
+      </svg>
+    </a>
+    <a class="header__logo" href="{{partial.logo.link.url.path}}" title="{{partial.logo.title}}">
+      {{macros.image(partial.logo.image)}}
+    </a>
+  </div>
+</div>

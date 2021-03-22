@@ -1,0 +1,30 @@
+{% import "/extensions/responsive_styles/responsive_styles.html" as responsive_styles with context %}
+
+{% set counter = create_counter() %}
+
+{% macro inspect(partial) %}
+  {% if env.name not in ['prod'] %}
+    <div class="inspect" aria-hidden="true" id="module-{{counter.value}}">
+      <div class="inspect__name">
+        {% if partial.module_id %}
+          M{{counter.value}}. {{partial.module_id}} ({{partial.partial}})
+        {% else %}
+          M{{counter.value}}. {{partial.partial}}
+        {% endif %}
+        <div class="inspect__name__icons">
+          <a href="#module-{{counter.value}}"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a>
+          <a href="?editor&inspect&module={{counter.value}}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro render_partial(partial, class_name) %}
+  <div class="{{class_name}}" data-module-num="{{counter.increment()}}">
+    {% set macros = partial|generate_macros %}
+    {{inspect(partial) if env.name not in ['prod']}}
+    {% include '/views/partials/' ~ partial.partial ~ '.html' with context %}
+    {{responsive_styles.render_responsive_styles()}}
+  </div>
+{% endmacro %}

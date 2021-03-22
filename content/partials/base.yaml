@@ -1,0 +1,19 @@
+download_android: 'https://play.google.com/store/apps/details?id=com.google.android.apps.tachyon&amp;hl=en'
+download_deeplink: &_deeplink 'https://h2hyk.app.goo.gl/?link=https://duo.google.com&apn=com.google.android.apps.tachyon&isi=1096918571&ibi=com.google.Tachyon&afl=https://play.google.com/store/apps/details?id=com.google.android.apps.tachyon%26referrer%3Dutm_source%253Dduo_website%2526utm_medium%253Dembedded_marketing%2526utm_campaign%253Dglobal-national-brand-Q118-download_link----&pt=9008&ct=duo_website_et_global-brnd-download_link&mt=8&efr=1'
+download_ios: 'https://itunes.apple.com/app/apple-store/id1096918571?pt=9008&amp;mt=8'
+
+try_buttons:
+- &_button_web
+  title@: 'Try Duo for web'
+  url: https://duo.google.com/?web
+  class: button--web-only
+- &_button_not-web
+  title@: 'Try now'
+  url: *_deeplink
+  attr: 'scroll-to-downloads-on-failure data-autotrack-cta="nav"'
+  class: button--not-web-only
+
+try_buttons_hero:
+- <<: *_button_web
+- <<: *_button_not-web
+  attr: 'scroll-to-downloads-on-failure data-autotrack-cta="hero"'

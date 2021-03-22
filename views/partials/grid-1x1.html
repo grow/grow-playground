@@ -1,0 +1,18 @@
+<div class="grid-1x1 {{partial.class}}">
+  {% for section in partial.sections %}
+    <div class="grid-1x1__section">
+      {% if section.background %}
+        <div class="grid-1x1__section__background">
+          {% for image in section.background.images %}
+            {{macros.image(image)}}
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if section.chapter %}
+        <div class="grid-1x1__section__content">
+          {{macros.chapter(section.chapter, class='grid-1x1__section__content')}}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>

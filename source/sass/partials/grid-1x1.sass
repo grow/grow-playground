@@ -1,0 +1,45 @@
+@import ../utils/breakpoints
+@import ../utils/grid
+@import ../utils/type
+
+.grid-1x1
+  +space-frame
+  align-items: center
+  display: grid
+  grid-gap: $space-lg
+  text-align: center
+  +lg
+    grid-template-columns: 1fr 1fr
+    text-align: left
+
+  & + &
+    +lg-lt
+      padding-top: 0
+
+.grid-1x1__section__background
+  line-height: 0
+
+.grid-1x1__section__content
+
+.grid-1x1__section__content__title
+  +type-h2
+  margin-bottom: 16px
+  +lg-lt
+    margin: 0 auto 16px
+
+.grid-1x1__section__content__body
+  +type-body
+  +lg-lt
+    margin: 0 auto
+
+.grid-1x1--reversed
+  +lg
+    .grid-1x1__section__content
+      order: -1
+    .grid-1x1__image
+      order: 1
+
+.grid-1x1--alternate-mobile
+  +lg-lt
+    .grid-1x1__section:nth-child(2n)
+      order: -1

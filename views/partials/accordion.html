@@ -1,0 +1,33 @@
+<div class="accordion {{partial.class}}">
+  <div class="accordion__content">
+    <div class="accordion__header">
+      <div class="accordion__header">
+        {% for button in partial.header.buttons %}
+          {{macros.button(button)}}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="accordion__items__items">
+      {% for item in partial.get('items') %}
+        <div class="accordion__items__item">
+          <div class="accordion__items__item__default" ng-click="expanded{{loop.index0}} = !expanded{{loop.index0}}">
+            <div class="accordion__items__item__default__content">
+              <div class="accordion__items__item__default__content__title">
+                {{_(item.title)}}
+              </div>
+              <div class="accordion__items__item__default__content__snippet" ng-if="!expanded{{loop.index0}}">
+                {{_(item.body)|truncate}}
+              </div>
+            </div>
+            <div class="accordion__items__item__default__arrow">
+              <i class="material-icons">keyboard_arrow_down</i>
+            </div>
+          </div>
+          <div class="accordion__items__item__body" ng-if="expanded{{loop.index0}}">
+            {{_(item.body)}}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

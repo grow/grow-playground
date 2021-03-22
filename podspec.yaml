@@ -1,0 +1,114 @@
+title: 'Starter'
+grow_version: '>=1.0.0-alpha.3'
+root: /starter/
+home: /content/pages/index.yaml
+
+meta:
+  site_name: 'Starter'
+  description: 'TODO: Replace this with a website description.'
+  twitter_user: '@Google'
+  google_analytics_id: 'UA-TODO'
+  gtm_id: ''
+  favicon_path: ''
+  favicon_url: ''
+  social_image_path: ''
+  social_image_url: ''
+  gcp_project_id: ''
+  stackdriver_api_key: ''
+  preconnect:
+  - https://lh3.googleusercontent.com
+  - https://storage.googleapis.com
+  - https://www.google-analytics.com
+  - https://www.googletagmanager.com
+
+localization:
+  default_locale: en_US
+  locales:
+  - de_DE
+  - en_US
+  - ja_JP
+  # When hosting on SCS, see http://go/locales for the correct language codes. 
+  # For hyphenated language codes, such as `pt-BR`, SCS fallbacks are case 
+  # sensitive and need to be aliased accordingly. Example:
+  # aliases:
+  #   pt-BR_br: pt_BR
+
+static_dirs:
+- static_dir: /dist/
+  serve_at: '/{root}/static/'
+- static_dir: /source/images/
+  serve_at: '/{root}/static/images/'
+
+sitemap:
+  enabled: false
+
+preprocessors:
+- kind: gulp
+- kind: google_sheets
+  name: strings
+  tags: [strings]
+  format: strings
+  autorun: false
+  id: 1jDU3M2q1WmF9aIYwKzAc9SXemmibsunVbnMsIFXsaCU
+  collection: /content/strings
+
+extensions:
+  jinja2:
+  - ext.macros.TemplateExtensions
+
+ext:
+- extensions.editor.EditorExtension:
+    enabled@env.prod: False
+    googleImageUploadUrl: https://ext-cloud-images-dot-grow-prod.appspot.com/_api/upload_file
+    screenshots:
+      partials:
+        collection: /content/pages
+        view: /views/partial.html
+      static_dir: /source/images/_screenshots
+      resolutions:
+      # Mobile
+      - width: 411
+        height: 731
+      # Desktop
+      - width: 1280
+        height: 1300
+- extensions.responsive_styles.ResponsiveStylesExtension:
+    media_queries:
+      all: '(min-width: 0)'
+      mobile: '(max-width: 718px)'
+      tablet: '(min-width: 718px)'
+      desktop: '(min-width: 1280px)'
+- extensions.html_min.HtmlMinExtension:
+    enabled@env.dev: False
+    options:
+      remove_comments: true
+      reduce_boolean_attributes: true
+      remove_empty_space: true
+
+deployments:
+  google3:
+    destination: local
+    name: local
+    keep_control_dir: no
+    out_dir: ./googledata/html/external_content/starter_google_com/
+    control_dir: ./googledata/services/g6/sites/starter
+    env: &_prod_env
+      name: prod
+      host: starter.com
+      scheme: https
+  prod:
+    destination: local
+    out_dir: ./build/
+    env: *_prod_env
+  staging:
+    destination: local
+    out_dir: ./build/
+    env:
+      name: staging
+  webreview:
+    destination: webreview
+    server: googwebreview.appspot.com
+    project: hw/madebygoogle
+    subdomain_prefix: starter
+    env:
+      name: webreview

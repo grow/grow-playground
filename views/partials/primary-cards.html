@@ -1,0 +1,18 @@
+<div class="primary-cards">
+  <div class="primary-cards__cards">
+    {% for card in partial.cards %}
+      <div class="primary-cards__cards__card {{card.class}}">
+        {% if card.background %}
+          <div class="primary-cards__cards__card__background">
+            {% for image in card.background.images %}
+              {{macros.image(image)}}
+            {% endfor %}
+          </div>
+        {% endif %}
+        <div class="primary-cards__cards__card__content">
+          {{macros.chapter(card.chapter, class='primary-cards__cards__card__content')}}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>

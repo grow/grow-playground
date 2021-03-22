@@ -1,0 +1,69 @@
+@import ../utils/breakpoints
+@import ../utils/grid
+@import ../utils/space
+@import ../utils/type
+
+.primary-cards
+  +space-inner-frame
+  padding-top: $space-xl
+  padding-bottom: $space-xl
+
+.primary-cards__cards
+
+.primary-cards__cards__card
+  border-radius: 28px
+  box-shadow: 0px 12px 35px rgba(32, 52, 89, 0.246176)
+  overflow: hidden
+  position: relative
+
+  &--reversed
+    .primary-cards__cards__card__content
+      right: 0
+      left: auto
+
+  &--layer-mobile
+    .primary-cards__cards__card__content
+      +lg-lt
+        bottom: 0
+        justify-content: flex-start
+        left: 0
+        position: absolute
+        top: 0
+
+  & + .primary-cards__cards__card
+    margin-top: $space-lg
+
+.primary-cards__cards__card__background
+  line-height: 0
+  pointer-events: none
+
+  img
+    width: 100%
+
+.primary-cards__cards__card__content
+  +space-inner-frame
+  display: flex
+  flex-direction: column
+  justify-content: center
+  +lg
+    bottom: 0
+    left: 0
+    position: absolute
+    top: 0
+    width: 50%
+
+.primary-cards__cards__card__content__eyebrow
+  +type-eyebrow
+  & + .primary-cards__cards__card__content__title
+    margin-top: $space-sm
+  
+.primary-cards__cards__card__content__title
+  +type-h4
+  & + .primary-cards__cards__card__content__body
+    margin-top: $space-sm
+
+.primary-cards__cards__card__content__body
+  & + .primary-cards__cards__card__content__buttons
+    margin-top: $space-md
+
+.primary-cards__cards__card__content__buttons

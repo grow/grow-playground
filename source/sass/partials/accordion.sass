@@ -1,0 +1,37 @@
+@import ../utils/space
+@import ../utils/type
+
+.accordion
+  +space-inner-frame
+  +md
+    padding-top: $space-xl
+    padding-bottom: $space-xl
+
+.accordion__header
+  display: flex
+  justify-content: flex-end
+  align-items: flex-end
+  margin-bottom: 24px
+
+.accordion__items
+
+.accordion__items__item
+  margin-bottom: 43px
+  &:last-child
+    margin-bottom: 0
+
+.accordion__items__item__default
+  display: flex
+  justify-content: space-between
+
+  &[ng-click]
+    cursor: pointer
+
+.accordion__items__item__default__content__arrow
+
+.accordion__items__item__default__content__title
+  +type-h4
+
+.accordion__items__item__body
+  +type-body
+  margin-top: 10px

@@ -1,0 +1,26 @@
+$space-xs: 4px
+$space-sm: 8px
+$space-md: 16px
+$space-lg: 32px
+$space-xl: 64px
+
+$space-content-max-width: 1440px
+$space-inner-max-width: 1180px
+
+=space-frame
+  box-sizing: border-box
+  margin: 0 auto
+  padding: $space-md $space-lg
+  width: clamp(0px, $space-content-max-width, 100%)
+  +lg-lt
+    padding: $space-lg $space-lg
+
+=space-inner-frame
+  +space-frame
+  width: clamp(0px, $space-inner-max-width, 100%)
+
+=space-outer-frame
+  +space-frame
+  padding: 0
+  +lg-lt
+    padding: 0

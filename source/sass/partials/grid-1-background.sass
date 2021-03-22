@@ -1,0 +1,72 @@
+@import ../utils/space
+@import ../utils/type
+
+.grid-1-background
+  +space-outer-frame
+  display: flex
+  flex-direction: column
+  position: relative
+  +lg-lt
+    text-align: center
+
+.grid-1-background__frame
+  display: flex
+  flex-direction: column
+  justify-content: center
+
+.grid-1-background__frame__content
+  +space-inner-frame
+
+.grid-1-background__frame__content__title
+  +type-h3
+
+  & + .grid-1-background__frame__content__body
+    margin-top: $space-md
+
+.grid-1-background__frame__content__buttons
+  +lg
+    display: inline-flex
+
+.grid-1-background__frame__content__buttons__button + .grid-1-background__frame__content__buttons__button
+  +lg
+    margin-left: $space-md
+  +lg-lt
+    margin-top: $space-md
+
+.grid-1-background__frame__content__body
+  +type-body
+
+  & + .grid-1-background__frame__content__buttons
+    margin-top: $space-lg
+
+.grid-1-background__media
+  line-height: 0
+  pointer-events: none
+
+.grid-1-background__media__image
+  img,
+  video
+    width: 100%
+
+.grid-1-background--centered
+  text-align: center
+
+.grid-1-background--has-background
+  .grid-1-background__frame
+    +lg
+      bottom: 0
+      left: 0
+      position: absolute
+      right: 0
+      top: 0
+
+.grid-1-background--reversed
+  .grid-1-background__frame
+    +lg
+      left: auto
+      width: 50%
+
+.grid-1-background--alternate-mobile
+  .grid-1-background__media
+    +lg-lt
+      order: 2

@@ -1,0 +1,29 @@
+@import ../utils/space
+@import ../utils/type
+
+.columns
+  +space-inner-frame
+  text-align: center
+  +md
+    padding-top: $space-xl
+    padding-bottom: $space-xl
+
+.columns__header
+  & + .columns__columns
+    margin-top: $space-lg
+
+.columns__header__title
+  +type-h2
+
+.columns__columns
+  display: grid
+  grid-gap: 24px
+  +md
+    grid-template-columns: 1fr 1fr 1fr 1fr
+
+.columns__columns__column
+  text-align: center
+
+.columns__columns__column__title
+  +type-h4
+  margin-bottom: $space-md

@@ -1,0 +1,18 @@
+$inspect-background-color: #fff
+$inspect-foreground-color: black
+
+=inspect-label($value)
+  @at-root [inspect-enabled] &
+    &:hover
+      &:before
+        background: $inspect-background-color
+        border: 1px dotted #333
+        content: '#{$value}'
+        font-size: 12px
+        font-weight: bold
+        letter-spacing: initial
+        line-height: 14px
+        padding: 5px 10px
+        position: absolute
+        text-transform: none
+        z-index: 10

@@ -1,0 +1,65 @@
+@import ../utils/breakpoints
+@import ../utils/space
+@import ../utils/type
+
+.hero
+
+.hero__content
+  +space-outer-frame
+  display: grid
+  grid-gap: 0px
+  margin: 0 auto
+  +lg
+    grid-gap: $space-lg
+    grid-template-columns: 1fr 1fr
+
+.hero__content__main
+  +space-frame
+  +lg-lt
+    +space-frame
+    order: 1
+    background: #fff
+
+.hero__content__main__icons
+  line-height: 0
+  margin-bottom: $space-md
+  +lg-lt
+    display: none
+
+.hero__content__main__icons__icon
+  max-width: 125px
+
+.hero__content__main__title
+  +type-h1
+  margin-bottom: $space-md
+
+.hero__content__main__body
+  +type-body-large
+  margin: 0 auto
+
+.hero__content__main__footnote
+  +type-footnote
+
+.hero__content__main__images
+  line-height: 0
+  margin: $space-md 0
+
+.hero__content__main__buttons
+  margin: $space-lg 0
+  display: flex
+
+.hero__content__main__buttons__button
+  +lg
+    display: inline-flex
+
+  & + &
+    +lg
+      margin-left: $space-sm
+
+.hero__content__image
+  line-height: 0
+  position: relative
+
+.hero__content__image img
+  max-width: 100%
+  width: 100%

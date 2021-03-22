@@ -1,0 +1,17 @@
+---
+editor:
+  label: Spacer
+  fields:
+  - type: select
+    key: class
+    options:
+    - label: Small
+      value: spacer--sm
+    - label: Medium
+      value: spacer--md
+    - label: Large
+      value: spacer--lg
+    - label: X-Large
+      value: spacer--xl
+---
+<div class="spacer {{partial.class}}"></div>

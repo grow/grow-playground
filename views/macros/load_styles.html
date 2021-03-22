@@ -1,0 +1,26 @@
+{% macro inline_partial_styles(name) %}
+  {% set path = '/dist/css/partials/' ~ name ~ '.min.css' %}
+  {% if doc.pod.file_exists(path) %}
+    <style>{% include path %}</style>
+  {% endif %}
+{% endmacro %}
+
+{% macro defer_partial_styles(name) %}
+  {% set path = g.static('/dist/css/partials/' ~ name ~ '.min.css').url.path %}
+  {{defer_stylesheet(path)}}
+{% endmacro %}
+
+{# This macro uses rel="preload" to cause stylesheets to begin loading
+   as soon as the browser parses this <link> element, but then parsing
+   continues and the stylesheets load asynchronously. #}
+{% macro defer_stylesheet(path) %}
+  <link
+    {# Some browsers don't support preload yet, so they'll use the
+       regular stylesheet attr instead #}
+    rel="stylesheet"
+    rel="preload"
+    href="{{path}}"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  >
+{% endmacro %}
