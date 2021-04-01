@@ -1,7 +1,7 @@
 ---
 test: true
 editing: true
-awesome: stuff
+awesome: cool stuff
 ---
 ## Hello world!
 
