@@ -1,4 +1,3 @@
----
 $title@: Starter - description.co
 description@: Description.
 partials:
@@ -138,5 +137,3 @@ partials:
       title: Try for free
     title: Get started
   class: grid-1-background--centered grid-1-background--alternate-mobile
-
----
