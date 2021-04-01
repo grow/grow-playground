@@ -1,4 +1,5 @@
-$title@: Starter - description.com
+---
+$title@: Starter - description.co
 description@: Description.
 partials:
 - partial: spacer
@@ -137,3 +138,5 @@ partials:
       title: Try for free
     title: Get started
   class: grid-1-background--centered grid-1-background--alternate-mobile
+
+---
