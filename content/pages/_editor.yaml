@@ -5,6 +5,9 @@ fields:
 - type: text
   key: description@
   label: Meta description
+- type: document
+  key: doc
+  label: Document
 - type: google_image
   key: meta_image
   label: Social sharing image
