@@ -1,6 +1,8 @@
 $title@: Getting started. test
 description@: Description.
 partials:
+- class: spacer--lg
+  partial: spacer
 - chapter:
     body:
       text: >-
@@ -8,7 +10,7 @@ partials:
         Adipisicing aliqua adipisicing et officia amet minim tempor fugiat ad
         aute. Nisi culpa incididunt eiusmod amet dolor in eu dolor cupidatat.
         Laboris cupidatat pariatur nulla id est ut magna velit deserunt nostrud
-        exercitation. Test.
+        exercitation. Test 2.
     buttons:
     - title: Learn more
       url: '#TODO'
@@ -22,22 +24,18 @@ partials:
       href="https://itunes.apple.com/app/apple-store/id1096918571?pt=9008&amp;mt=8"
       target="_blank">iOS</a>
     icons:
-    - _meta:
-        height: 512
-        width: 512
-      responsive_styles:
+    - responsive_styles:
         all: 'max-width: 48px'
       url: >-
         https://lh3.googleusercontent.com/vmhpd9Ueoznnt3rg3srzRXan4cWomk-GG0t2zRNjwOapAXep-b4bAPjTFbrXgk2sS4sASpI3an_U62sDfIxutTBzaY5x6KWeFS5TJKI
     title:
       text: Cupidatat veniam fugiat tempor.
   image:
-    _meta:
-      height: 341
-      width: 512
     url: >-
       https://lh3.googleusercontent.com/a4x29ldDCRaTfBBQlRz-kSl98AJT_MVGVQZ565zGzPrFF32X4yyTeQM0S5BP6J2_pKBCUbf2XRKVqax-KIq7R7t1bWf9fS5gWyKgLg
   partial: hero
+- class: spacer--lg
+  partial: spacer
 - partial: grid-1x1
   sections:
   - background:
