@@ -8,7 +8,7 @@ fields:
 - type: document
   key: doc
   label: Document
-- type: google_image
+- type: media
   key: meta_image
   label: Social sharing image
 - type: partials
